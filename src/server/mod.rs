@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::net;
+use std::net::SocketAddr;
 use std::rc::Rc;
 use std::time;
 
@@ -196,6 +197,14 @@ impl Server {
         self.step_active_clients(now_ms);
 
         std::mem::take(&mut self.events_out).into_iter()
+    }
+
+    pub fn client_addresses(&self) -> Vec<SocketAddr> {
+        let mut vec = vec![];
+        for key in self.clients.keys() {
+            vec.push(*key);
+        }
+        vec
     }
 
     /// Sends as many outbound frames as possible for each client.
